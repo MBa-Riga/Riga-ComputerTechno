@@ -1,12 +1,14 @@
-#penser a tout ecrire en anglais
-# passer le .csv en .xls ? (car txt pas adapté)
+# to do : modif le format .csv en autre chose ?
+
+# Description : Computer Technologies in Telecommunications : Homework of the week 3
 
 #lib declaration :
 import numpy as np
 import re #for regular expression
-import pandas as pd #!= panda
+import pandas as pd
 import datacleaner
 import matplotlib as plt
+from clean_data_ping import clean_ping #for the manual cleaning
 
 
 # declaration of the name of the file we will work on, it should be in the same repository that the main, or should be the absolute path
@@ -18,41 +20,51 @@ print("We will work on the file ",filename," \n")
 file = open(filename, 'r')
 fresh_data = file.read()
 print(filename," file contains : \n")
-print(fresh_data)
+#print(fresh_data)
 file.close()
 
-#clean_ping(filename) #clean manually
+############ CLEAN DATA ################
+choose = 1 #var to choose how you want to clean your data : 0 both ways, 1 manually, 2 with librairies
 
-#datacleaner data1_ping.csv -o data_clean.csv
+# 1) Do it manually (it's suppose that we already know the form of the data, so we create a special cleaning code just for these type of data, it's not the perfect solutions but it permits to discover want we need and touch the future problems and dificulties)
+if choose == 0 or choose == 1:
+    filename_cleandata=clean_ping(filename)
 
-df = pd.read_csv('data1_ping.csv', error_bad_lines=False) #the second argument permit to skip the line when unexpected fields detected
-print(df)
-
-#df = df.shape  # Shape of the dataset
-print("\n")
-#print(df)
-
-x = df.isnull().sum()  #Checking Null Values
-print ("the number of null value is ",x,"\n") # pb : car PING ... 0, tittle ?
-dftype = df.dtypes
-print(dftype,"\n")
-
-#il peut y avoir des null (blancs/manquant) ou des junks
-
-#clean_df = datacleaner.autoclean(df)
-#print(clean_df)
+    print("Now we will work on the new file with cleaned data",file,"\n")
+    file = open(filename_cleandata, 'r')
+    datacleaned = file.read()
+    print(file, " file contains : \n")
+    print(datacleaned)
+    file.close()
 
 
+# 2) Do it with librairies : panda, datacleaner ...
+if choose == 0 or choose == 2:
+#   Put the data in a type of panda framework
+    df = pd.read_csv('data1_ping.csv', error_bad_lines=False) #the second argument permit to skip the line when unexpected fields detected
+#    print(df)
+# -> problem here because the file is not parse as I want (due to the shape of the data) : read_csv read data in columns and my file has data in rows
+# solution to try is to transpose data ? and before split them with '   '
 
-# Analyze :
-desc = df.describe()
-print(desc,"\n")
+
+#   Checking how the data are interpreted
+    df_type = df.dtypes
+    print("type is ",df_type,"\n")
+    df_info = df.info()
+    print("info :\n",df_info,"\n")
+
+#   Checking Null Values
+    x = df.isnull().sum()
+    print ("The number of null value is ",x,"\n")
+
+#   Fill up blank Na (and junk value ?)
+#    df_clean = datacleaner.autoclean(df)
+#    print(df_clean)
 
 
-'''print("Now we will work on the new file data_clean \n")
-file = open(data_clean.txt, 'r')
-datacleaned = file.read()
-print(file," file contains : \n")
-print(datacleaned)
-file.close()'''
 
+################ ANALYZE DATA ##################### maybe compare it to the end of the csv file ?
+# what can we analyze ? Statistics ?
+
+df_desc = df.describe()
+print("description :\n",df_desc,"\n")
