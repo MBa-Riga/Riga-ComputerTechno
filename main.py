@@ -24,7 +24,7 @@ print(filename," file contains : \n")
 file.close()
 
 ############ CLEAN DATA ################
-choose = 1 #var to choose how you want to clean your data : 0 both ways, 1 manually, 2 with librairies
+choose = 2 #var to choose how you want to clean your data : 0 both ways, 1 manually, 2 with librairies
 
 # 1) Do it manually (it's suppose that we already know the form of the data, so we create a special cleaning code just for these type of data, it's not the perfect solutions but it permits to discover want we need and touch the future problems and dificulties)
 if choose == 0 or choose == 1:
@@ -40,11 +40,15 @@ if choose == 0 or choose == 1:
 
 # 2) Do it with librairies : panda, datacleaner ...
 if choose == 0 or choose == 2:
-#   Put the data in a type of panda framework
-    df = pd.read_csv('data1_ping.csv', error_bad_lines=False) #the second argument permit to skip the line when unexpected fields detected
-#    print(df)
-# -> problem here because the file is not parse as I want (due to the shape of the data) : read_csv read data in columns and my file has data in rows
-# solution to try is to transpose data ? and before split them with '   '
+    fresh_data2 = re.split('=', fresh_data)
+    print("fresh_data2 :",fresh_data2, "and type ",type(fresh_data2))
+
+    dF = pd.DataFrame(fresh_data2)
+    dF.to_csv('newdata.csv')
+    df =pd.read_csv('newdata.csv')
+    print("df = \n",df,"\n")
+
+# -> problem here because the file is not shape as I want (due to the data initial data form)
 
 
 #   Checking how the data are interpreted
