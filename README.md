@@ -1,2 +1,3 @@
 # Riga-ComputerTechno
-How-to-clean&amp;analyze-data
+How-to-clean & analyze-data;
+My first project on cleaning and analazing data.
